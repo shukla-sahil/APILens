@@ -112,8 +112,11 @@ import { SnippetTabsComponent } from '../../shared/components/snippet-tabs/snipp
               Run this endpoint against the auto mock server to test integrations without a live backend.
             </p>
 
-            <button type="button" (click)="runMock(endpoint)" [disabled]="isMockLoading()">
-              {{ isMockLoading() ? 'Running Mock Request...' : 'Run Mock Request' }}
+            <button type="button" 
+                    (click)="runMock(endpoint)" 
+                    [disabled]="isMockLoading()"
+                    [class.btn-loader]="isMockLoading()">
+              {{ isMockLoading() ? 'Running Mock Request' : 'Run Mock Request' }}
             </button>
 
             <p class="mock-status" *ngIf="mockStatus()">{{ mockStatus() }}</p>

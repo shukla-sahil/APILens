@@ -19,7 +19,10 @@ import { EndpointCardComponent } from '../../shared/components/endpoint-card/end
         <p class="page-lead">Interactive documentation generated from your uploaded API specification.</p>
       </header>
 
-      <section class="card loading" *ngIf="isLoading()">Loading documentation...</section>
+        <section class="center-content" *ngIf="isLoading()">
+          <div class="spinner-loader"></div>
+          <p>Loading documentation...</p>
+        </section>
       <p class="error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
 
       <ng-container *ngIf="projectData() as data">

@@ -58,8 +58,11 @@ interface ChatMessage {
           placeholder="Ask about endpoint behavior, auth, resources, or data flow..."
         ></textarea>
 
-        <button type="button" [disabled]="!question.trim() || isLoading()" (click)="sendQuestion()">
-          {{ isLoading() ? 'Thinking...' : 'Ask API Assistant' }}
+        <button type="button" 
+                [disabled]="!question.trim() || isLoading()" 
+                [class.btn-loader]="isLoading()"
+                (click)="sendQuestion()">
+            {{ isLoading() ? 'Thinking' : 'Ask API Assistant' }}
         </button>
       </section>
     </section>

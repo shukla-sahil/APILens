@@ -18,7 +18,12 @@ import { ProjectContextService } from '../../core/services/project-context.servi
           <p class="page-lead">Revisit previously generated documentation projects and continue exploring.</p>
         </div>
 
-        <button type="button" (click)="loadProjects()">Refresh</button>
+        <button type="button" 
+                (click)="loadProjects()" 
+                [disabled]="isLoading()" 
+                [class.btn-loader]="isLoading()">
+          {{ isLoading() ? 'Loading' : 'Refresh' }}
+        </button>
       </header>
 
       <p class="error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
@@ -149,6 +154,7 @@ export class HistoryPageComponent {
 
   readonly projects = signal<ProjectListItem[]>([]);
   readonly errorMessage = signal('');
+  readonly isLoading = signal(false);
 
   constructor() {
     this.loadProjects();
@@ -160,17 +166,19 @@ export class HistoryPageComponent {
 
   loadProjects(): void {
     this.errorMessage.set('');
+    this.isLoading.set(true);
 
     this.api.getProjects().subscribe({
       next: (result) => {
         this.projects.set(result.projects || []);
+        this.isLoading.set(false);
       },
       error: (error: { error?: { message?: string } }) => {
         this.errorMessage.set(error?.error?.message || 'Failed to load project history.');
+        this.isLoading.set(false);
       }
     });
   }
-
   removeProject(projectId: string): void {
     this.api.deleteProject(projectId).subscribe({
       next: () => {

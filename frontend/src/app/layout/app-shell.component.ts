@@ -16,7 +16,7 @@ import { ProjectContextService } from '../core/services/project-context.service'
     <div class="shell">
       <aside class="sidebar">
         <a routerLink="/dashboard" class="brand">
-          <span class="brand__chip">AI</span>
+          <img src="data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M12%2022C17.5228%2022%2022%2017.5228%2022%2012C22%206.47715%2017.5228%202%2012%202C6.47715%202%202%206.47715%202%2012C2%2017.5228%206.47715%2022%2012%2022Z%22%20stroke%3D%22%231ea7fd%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M12%2016C14.2091%2016%2016%2014.2091%2016%2012C16%209.79086%2014.2091%208%2012%208C9.79086%208%208%209.79086%208%2012C8%2014.2091%209.79086%2016%2012%2016Z%22%20stroke%3D%22%23ff8b3d%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M12%202V8%22%20stroke%3D%22%231ea7fd%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M12%2016V22%22%20stroke%3D%22%23ff8b3d%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M4.92993%204.93005L9.16993%209.17005%22%20stroke%3D%22%231ea7fd%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M14.83%2014.83L19.07%2019.07%22%20stroke%3D%22%23ff8b3d%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E" alt="API Lens Icon" class="brand__icon" />
           <span>
             <strong>API Lens</strong>
             <small>Documentation Generator</small>
@@ -118,19 +118,11 @@ import { ProjectContextService } from '../core/services/project-context.service'
         font-size: 0.76rem;
       }
 
-      .brand__chip {
-        align-items: center;
-        background: linear-gradient(145deg, var(--brand-primary), color-mix(in srgb, var(--brand-accent) 72%, black));
-        border-radius: 0.6rem;
-        color: #041016;
-        box-shadow: 0 8px 16px rgb(0 0 0 / 22%);
-        display: inline-flex;
-        font-family: var(--font-mono);
-        font-size: 0.76rem;
-        font-weight: 800;
-        height: 2rem;
-        justify-content: center;
-        min-width: 2rem;
+      .brand__icon {
+        height: 32px;
+        width: 32px;
+        flex-shrink: 0;
+        transition: transform 0.2s ease;
       }
 
       .nav {

@@ -46,8 +46,11 @@ import { UploadDropzoneComponent } from '../../shared/components/upload-dropzone
             <strong>{{ selectedFileName() || 'None' }}</strong>
           </p>
 
-          <button type="button" [disabled]="!selectedFile() || isBusy()" (click)="generateDocumentation()">
-            {{ isBusy() ? 'Generating...' : 'Generate Documentation' }}
+            <button type="button" 
+                    [disabled]="!selectedFile() || isBusy()" 
+                    [class.btn-loader]="isBusy()"
+                    (click)="generateDocumentation()">
+              {{ isBusy() ? 'Generating Docs' : 'Generate Documentation' }}
           </button>
         </div>
       </section>

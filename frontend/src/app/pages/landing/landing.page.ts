@@ -21,7 +21,7 @@ import { AuthService } from '../../core/services/auth.service';
       <!-- Header Navigation -->
       <header class="navbar" [class.scrolled]="isScrolled()">
         <div class="navbar__brand" routerLink="/">
-          <span class="brand__chip">AI</span>
+          <img src="data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M12%2022C17.5228%2022%2022%2017.5228%2022%2012C22%206.47715%2017.5228%202%2012%202C6.47715%202%202%206.47715%202%2012C2%2017.5228%206.47715%2022%2012%2022Z%22%20stroke%3D%22%231ea7fd%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M12%2016C14.2091%2016%2016%2014.2091%2016%2012C16%209.79086%2014.2091%208%2012%208C9.79086%208%208%209.79086%208%2012C8%2014.2091%209.79086%2016%2012%2016Z%22%20stroke%3D%22%23ff8b3d%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M12%202V8%22%20stroke%3D%22%231ea7fd%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M12%2016V22%22%20stroke%3D%22%23ff8b3d%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M4.92993%204.93005L9.16993%209.17005%22%20stroke%3D%22%231ea7fd%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M14.83%2014.83L19.07%2019.07%22%20stroke%3D%22%23ff8b3d%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E" alt="API Lens" class="brand__icon" />
           <span class="brand__name"><strong>API Lens</strong></span>
         </div>
         
@@ -109,17 +109,24 @@ import { AuthService } from '../../core/services/auth.service';
                     </label>
                   </div>
 
-                  <button type="submit" class="btn-submit" [disabled]="isBusy() || !auth.isConfigured()">
-                    <span *ngIf="!isBusy()">{{ isLoginMode() ? 'Log In to API Lens' : 'Create Account' }}</span>
-                    <span *ngIf="isBusy()" class="loader">Please wait...</span>
+                    <button type="submit" class="btn-submit" 
+                            [disabled]="isBusy() || !auth.isConfigured()"
+                            [class.btn-loader]="isBusy()">
+                      <span *ngIf="!isBusy()">{{ isLoginMode() ? 'Log In to API Lens' : 'Create Account' }}</span>
+                      <span *ngIf="isBusy()">Please wait</span>
                   </button>
                 </form>
 
                 <div class="auth-divider"><span>or continue with</span></div>
 
-                <button type="button" class="btn-google" (click)="signInWithGoogle()" [disabled]="isBusy() || !auth.isConfigured()">
-                  <span aria-hidden="true" class="google-icon">G</span>
-                  <span>Sign in with Google</span>
+                <button type="button" class="btn-google" 
+                        (click)="signInWithGoogle()" 
+                        [disabled]="isBusy() || !auth.isConfigured()"
+                        [class.btn-loader]="isBusy()">
+                  <ng-container *ngIf="!isBusy()">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="google-logo" />
+                  </ng-container>
+                  <span>{{ isBusy() ? 'Signing in' : 'Sign in with Google' }}</span>
                 </button>
 
                 <div class="auth-feedback">
@@ -278,14 +285,10 @@ import { AuthService } from '../../core/services/auth.service';
         cursor: pointer;
         text-decoration: none;
       }
-      .brand__chip {
-        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
-        color: #051724;
-        font-weight: 800;
-        font-size: 0.8rem;
-        padding: 0.25rem 0.65rem;
-        border-radius: 6px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      .brand__icon {
+        height: 28px;
+        width: 28px;
+        flex-shrink: 0;
       }
       .brand__name {
         font-size: 1.25rem;
@@ -601,17 +604,10 @@ import { AuthService } from '../../core/services/auth.service';
       .btn-google:hover:not([disabled]) {
         background: color-mix(in srgb, var(--text-primary) 4%, var(--panel-bg));
       }
-      .google-icon {
-        background: linear-gradient(145deg, #ffffff, #f6d6bb);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        color: #1f2937;
-        font-weight: 900;
-        font-size: 0.9rem;
+      .google-logo {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
       }
 
       .auth-feedback { margin-top: 1rem; }
