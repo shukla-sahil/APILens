@@ -10,637 +10,818 @@ import { AuthService } from '../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <section class="landing">
-      <header class="hero card reveal">
-        <div class="hero__content">
-          <p class="badge">Smarter Than Swagger</p>
-          <h2>Build API documentation that feels designed, intelligent, and instantly usable.</h2>
-          <p>
-            AI API Documentation Generator transforms OpenAPI and Postman files into interactive docs, endpoint
-            explorers, generated SDK snippets, mock testing panels, and AI-guided onboarding for developers.
-          </p>
+    <div class="landing-layout">
+      <!-- Ambient background effects -->
+      <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+      </div>
 
-          <div class="hero__actions">
-            <a routerLink="/dashboard">Start New Project</a>
-            <a routerLink="/history" class="ghost">Open Project History</a>
-          </div>
-
-          <ul class="hero__stats">
-            <li>
-              <strong>3</strong>
-              <span>SDK outputs</span>
-            </li>
-            <li>
-              <strong>1-click</strong>
-              <span>spec parsing</span>
-            </li>
-            <li>
-              <strong>Live</strong>
-              <span>mock testing</span>
-            </li>
-          </ul>
+      <!-- Header Navigation -->
+      <header class="navbar" [class.scrolled]="isScrolled()">
+        <div class="navbar__brand" routerLink="/">
+          <span class="brand__chip">AI</span>
+          <span class="brand__name"><strong>API Lens</strong></span>
         </div>
-
-        <div class="hero__auth card">
-          <p class="auth-card__eyebrow">Start Here</p>
-          <h3>{{ isLoginMode() ? 'Welcome back' : 'Create your account' }}</h3>
-          <p class="auth-card__lead">
-            {{
-              isLoginMode()
-                ? 'Log in to open your personal API projects and continue exactly where you left off.'
-                : 'Sign up in seconds to keep your generated docs, flow graphs, and endpoint history tied to your account.'
-            }}
-          </p>
-
-          <div class="auth-card__switch">
-            <button type="button" [class.active]="isLoginMode()" (click)="switchMode('login')">Log In</button>
-            <button type="button" [class.active]="!isLoginMode()" (click)="switchMode('signup')">Sign Up</button>
-          </div>
-
-          <p class="config-warning" *ngIf="!auth.isConfigured()">
-            Supabase auth keys are missing. Set NG_APP_SUPABASE_URL and NG_APP_SUPABASE_ANON_KEY to enable login.
-          </p>
-
-          <form class="auth-form" (ngSubmit)="submitAuth()">
-            <label *ngIf="!isLoginMode()">
-              Full Name
-              <input
-                type="text"
-                name="fullName"
-                [(ngModel)]="fullName"
-                placeholder="Jane Patel"
-                [disabled]="isBusy()"
-              />
-            </label>
-
-            <label>
-              Email
-              <input
-                type="email"
-                name="email"
-                [(ngModel)]="email"
-                placeholder="you@company.com"
-                autocomplete="email"
-                [disabled]="isBusy()"
-                required
-              />
-            </label>
-
-            <label>
-              Password
-              <input
-                type="password"
-                name="password"
-                [(ngModel)]="password"
-                placeholder="At least 8 characters"
-                autocomplete="current-password"
-                [disabled]="isBusy()"
-                required
-                minlength="8"
-              />
-            </label>
-
-            <button type="submit" class="auth-primary" [disabled]="isBusy() || !auth.isConfigured()">
-              {{ isBusy() ? 'Please wait...' : isLoginMode() ? 'Log In to API Lens' : 'Create Account' }}
-            </button>
-          </form>
-
-          <div class="auth-divider"><span>or continue with</span></div>
-
-          <button
-            type="button"
-            class="google-btn"
-            (click)="signInWithGoogle()"
-            [disabled]="isBusy() || !auth.isConfigured()"
-          >
-            <span aria-hidden="true">G</span>
-            Sign in with Google
-          </button>
-
-          <p class="auth-message success" *ngIf="successMessage()">{{ successMessage() }}</p>
-          <p class="auth-message error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
+        
+        <nav class="navbar__links">
+          <a href="#features">Features</a>
+          <a href="#workflow">How It Works</a>
+          <a routerLink="/history">History</a>
+        </nav>
+        
+        <div class="navbar__actions">
+          <button class="nav-btn-ghost" (click)="scrollToAuth('login')">Log In</button>
+          <button class="nav-btn-primary" (click)="scrollToAuth('signup')">Sign Up</button>
         </div>
       </header>
 
-      <section class="showcase">
-        <article class="showcase__card card reveal reveal--delay-1">
-          <div>
-            <h3>Documentation with real structure</h3>
-            <p>
-              Grouped endpoints, request and response sections, inline authentication details, and clean code snippets
-              in one flow.
+      <main class="landing-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+          <div class="hero__text reveal">
+            <div class="badge-wrapper">
+              <span class="badge glowing-badge">✨ Smarter Than Swagger</span>
+            </div>
+            <h1 class="hero__title">Build API docs that feel designed & intelligent.</h1>
+            <p class="hero__subtitle">
+              Transform OpenAPI and Postman files into interactive docs, visual flow graphs, and generated SDK snippets. Complete with AI-guided onboarding.
             </p>
+
+            <div class="hero__stats">
+              <div class="stat-item">
+                <span class="stat-val">3</span>
+                <span class="stat-label">SDK Outputs</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-val">1-Click</span>
+                <span class="stat-label">Spec Parsing</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-val">Live</span>
+                <span class="stat-label">Mock Testing</span>
+              </div>
+            </div>
           </div>
-          <img src="assets/landing/docs-ui-preview.svg" alt="Documentation viewer interface" />
-        </article>
 
-        <article class="showcase__card card reveal reveal--delay-2">
-          <div>
-            <h3>Visual API flow understanding</h3>
-            <p>
-              See endpoint groups, resource relationships, and security dependencies with a simple graph made for fast
-              technical onboarding.
-            </p>
+          <!-- Auth Card side -->
+          <div class="hero__auth-wrapper reveal reveal--delay-1" id="auth-box">
+            <div class="auth-card floating-card">
+              <div class="auth-card__header">
+                 <h2 class="auth-card__title">{{ isLoginMode() ? 'Welcome back' : 'Create an account' }}</h2>
+                 <p class="auth-card__desc">
+                   {{ isLoginMode() ? 'Log in to continue building your API documentation.' : 'Sign up to keep your generated docs securely in the cloud.' }}
+                 </p>
+              </div>
+
+              <!-- Animated Toggle -->
+              <div class="auth-toggle">
+                <div class="auth-toggle__indicator" [class.is-signup]="!isLoginMode()"></div>
+                <button type="button" [class.active]="isLoginMode()" (click)="switchMode('login')">Log In</button>
+                <button type="button" [class.active]="!isLoginMode()" (click)="switchMode('signup')">Sign Up</button>
+              </div>
+
+              <div class="auth-body">
+                <p class="config-warning" *ngIf="!auth.isConfigured()">
+                  Supabase auth keys are missing. Set NG_APP_SUPABASE_URL and NG_APP_SUPABASE_ANON_KEY to enable login.
+                </p>
+
+                <form class="auth-form" (ngSubmit)="submitAuth()">
+                  <div class="form-group signup-wrap" [class.show-signup]="!isLoginMode()">
+                    <label>
+                      Full Name
+                      <input type="text" name="fullName" [(ngModel)]="fullName" placeholder="Jane Patel" [disabled]="isBusy()" />
+                    </label>
+                  </div>
+
+                  <div class="form-group">
+                    <label>
+                      Email
+                      <input type="email" name="email" [(ngModel)]="email" placeholder="you@company.com" autocomplete="email" [disabled]="isBusy()" required />
+                    </label>
+                  </div>
+
+                  <div class="form-group">
+                    <label>
+                      Password
+                      <input type="password" name="password" [(ngModel)]="password" placeholder="At least 8 characters" autocomplete="current-password" [disabled]="isBusy()" required minlength="8" />
+                    </label>
+                  </div>
+
+                  <button type="submit" class="btn-submit" [disabled]="isBusy() || !auth.isConfigured()">
+                    <span *ngIf="!isBusy()">{{ isLoginMode() ? 'Log In to API Lens' : 'Create Account' }}</span>
+                    <span *ngIf="isBusy()" class="loader">Please wait...</span>
+                  </button>
+                </form>
+
+                <div class="auth-divider"><span>or continue with</span></div>
+
+                <button type="button" class="btn-google" (click)="signInWithGoogle()" [disabled]="isBusy() || !auth.isConfigured()">
+                  <span aria-hidden="true" class="google-icon">G</span>
+                  <span>Sign in with Google</span>
+                </button>
+
+                <div class="auth-feedback">
+                  <p class="auth-message success" *ngIf="successMessage()">{{ successMessage() }}</p>
+                  <p class="auth-message error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <img src="assets/landing/flow-ui-preview.svg" alt="API flow visualization interface" />
-        </article>
-      </section>
+        </section>
 
-      <section class="workflow card reveal reveal--delay-2">
-        <h3>How Teams Use It</h3>
-        <ol>
-          <li>
-            <span>01</span>
-            <div>
-              <strong>Upload Spec</strong>
-              <p>Drop in a Postman collection or OpenAPI JSON/YAML file.</p>
+        <!-- Features Showcase -->
+        <section id="features" class="showcase-section">
+          <div class="section-heading reveal">
+            <h2>Visually structured, completely mapped.</h2>
+            <p>Everything you need for a modern developer experience, generated instantly.</p>
+          </div>
+          
+          <div class="showcase-grid">
+            <article class="feature-card reveal reveal--delay-1">
+              <div class="feature-card__content">
+                <span class="feature-icon">📚</span>
+                <h3>Real Structure</h3>
+                <p>Auto-grouped endpoints with request schemas, auth details, and code snippets natively embedded.</p>
+              </div>
+              <div class="feature-card__visual">
+                <img src="assets/landing/docs-ui-preview.svg" alt="Documentation viewer interface" />
+              </div>
+            </article>
+
+            <article class="feature-card reveal reveal--delay-2">
+              <div class="feature-card__content">
+                <span class="feature-icon">🕸️</span>
+                <h3>Visual Mapping</h3>
+                <p>See endpoint connections, resource dependencies, and API hierarchies cleanly graphed.</p>
+              </div>
+              <div class="feature-card__visual">
+                <img src="assets/landing/flow-ui-preview.svg" alt="API flow visualization interface" />
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- Workflow Section -->
+        <section id="workflow" class="workflow-section reveal">
+          <div class="workflow-container floating-card">
+            <h3>How Teams Operate</h3>
+            <div class="workflow-steps">
+              <div class="step-item">
+                <div class="step-num">01</div>
+                <h4>Upload Spec</h4>
+                <p>Drop in a Postman collection or OpenAPI JSON/YAML file.</p>
+              </div>
+              <div class="step-divider"></div>
+              <div class="step-item">
+                <div class="step-num">02</div>
+                <h4>Generate & AI Parse</h4>
+                <p>Automatically extract endpoints, auth layers, and fix missing fields.</p>
+              </div>
+              <div class="step-divider"></div>
+              <div class="step-item">
+                <div class="step-num">03</div>
+                <h4>Ship Better DX</h4>
+                <p>Share interactive docs and test integrations against mock responses.</p>
+              </div>
             </div>
-          </li>
-          <li>
-            <span>02</span>
-            <div>
-              <strong>Generate Docs + AI Insights</strong>
-              <p>Automatically parse endpoints, auth, examples, and missing fields.</p>
-            </div>
-          </li>
-          <li>
-            <span>03</span>
-            <div>
-              <strong>Ship Better DX</strong>
-              <p>Share docs, ask API questions, and test integrations against mock responses.</p>
-            </div>
-          </li>
-        </ol>
-      </section>
+          </div>
+        </section>
 
-      <section class="grid">
-        <article class="card reveal reveal--delay-1">
-          <span class="card__label">AUTODOC</span>
-          <h3>Automatic Documentation</h3>
-          <p>Extract methods, parameters, request schemas, authentication, and responses with zero manual effort.</p>
-        </article>
-
-        <article class="card reveal reveal--delay-2">
-          <span class="card__label">AI GUIDE</span>
-          <h3>AI Assistance</h3>
-          <p>Get endpoint explanations, missing field suggestions, generated payload examples, and API summaries.</p>
-        </article>
-
-        <article class="card reveal reveal--delay-3">
-          <span class="card__label">DEV TOOLS</span>
-          <h3>Chat, Flow, and Mocking</h3>
-          <p>Ask questions about your API, visualize endpoint relationships, and test against auto-generated mocks.</p>
-        </article>
-      </section>
-    </section>
+        <footer class="app-footer">
+           <p>&copy; {{ currentYear }} API Lens. Built for modern developer experience.</p>
+        </footer>
+      </main>
+    </div>
   `,
   styles: [
     `
-      .landing {
-        display: grid;
-        gap: 1rem;
-      }
-
-      .hero {
-        background:
-          radial-gradient(circle at 82% 18%, color-mix(in srgb, var(--brand-accent) 25%, transparent), transparent 33%),
-          radial-gradient(circle at 18% 12%, color-mix(in srgb, var(--brand-primary) 20%, transparent), transparent 33%),
-          linear-gradient(145deg, color-mix(in srgb, var(--panel-bg) 94%, transparent), var(--panel-bg));
-        display: grid;
-        gap: 1.2rem;
-        grid-template-columns: 1.05fr 0.95fr;
-        overflow: hidden;
-        padding: clamp(1.1rem, 2vw, 1.6rem);
-        position: relative;
-      }
-
-      .hero h2 {
-        font-size: clamp(1.7rem, 3.2vw, 2.8rem);
-        line-height: 1.08;
-        margin: 0.65rem 0;
-        max-width: 14ch;
-      }
-
-      .hero p {
-        color: var(--text-secondary);
-        margin: 0;
-        max-width: 62ch;
-      }
-
-      .hero__actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.7rem;
-        margin-top: 1.2rem;
-      }
-
-      .hero__actions a {
-        background: linear-gradient(130deg, var(--brand-primary), color-mix(in srgb, var(--brand-accent) 26%, var(--brand-primary)));
-        border-radius: 0.65rem;
-        color: #051724;
-        font-size: 0.9rem;
-        font-weight: 700;
-        padding: 0.66rem 0.95rem;
-        text-decoration: none;
-        transition: transform 0.2s ease;
-      }
-
-      .hero__actions a:hover {
-        transform: translateY(-2px);
-      }
-
-      .hero__actions a.ghost {
-        background: transparent;
-        border: 1px solid var(--border-color);
+      :host {
+        display: block;
         color: var(--text-primary);
+        font-family: var(--font-sans);
+      }
+      
+      .landing-layout {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* Glowing Ambient Background */
+      .ambient-bg {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background: var(--surface);
+        overflow: hidden;
+        pointer-events: none;
+      }
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(140px);
+        opacity: 0.6;
+        animation: float 25s infinite ease-in-out alternate;
+      }
+      .orb-1 {
+        top: -15%; left: -10%;
+        width: 55vw; height: 55vw;
+        background: color-mix(in srgb, var(--brand-primary) 35%, transparent);
+      }
+      .orb-2 {
+        bottom: -20%; right: -10%;
+        width: 65vw; height: 65vw;
+        background: color-mix(in srgb, var(--brand-accent) 25%, transparent);
+        animation-delay: -5s;
+      }
+      .orb-3 {
+        top: 30%; left: 55%;
+        width: 45vw; height: 45vw;
+        background: color-mix(in srgb, #9d4edd 20%, transparent);
+        animation-delay: -12s;
+      }
+
+      @keyframes float {
+        0% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(8%, 12%) scale(1.05); }
+        100% { transform: translate(-5%, -8%) scale(0.95); }
+      }
+
+      /* Glassy Header */
+      .navbar {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 5%;
+        z-index: 100;
+        transition: all 0.3s ease;
+        background: transparent;
+      }
+      .navbar.scrolled {
+        background: color-mix(in srgb, var(--surface) 75%, transparent);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+        padding: 0.8rem 5%;
+      }
+
+      .navbar__brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .brand__chip {
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+        color: #051724;
+        font-weight: 800;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.65rem;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      }
+      .brand__name {
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+        color: var(--text-primary);
+      }
+
+      .navbar__links {
+        display: flex;
+        gap: 2.5rem;
+      }
+      .navbar__links a {
+        text-decoration: none;
+        font-weight: 500;
+        color: var(--text-secondary);
+        transition: color 0.2s ease;
+        font-size: 0.95rem;
+      }
+      .navbar__links a:hover {
+        color: var(--text-primary);
+      }
+
+      .navbar__actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+      .nav-btn-ghost {
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+        font-weight: 600;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: background 0.2s ease;
+        font-size: 0.95rem;
+      }
+      .nav-btn-ghost:hover {
+        background: color-mix(in srgb, var(--text-primary) 8%, transparent);
+      }
+      .nav-btn-primary {
+        background: var(--text-primary);
+        color: var(--surface);
+        border: none;
+        padding: 0.55rem 1.25rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .nav-btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      }
+
+      /* Content Container */
+      .landing-content {
+        padding-top: 7rem;
+        display: flex;
+        flex-direction: column;
+        gap: 7rem;
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 5rem;
+        align-items: center;
+        padding: 2rem 5%;
+      }
+
+      .badge-wrapper {
+        margin-bottom: 1.5rem;
+      }
+      .glowing-badge {
+        font-size: 0.85rem;
+        padding: 0.45rem 1.1rem;
+        background: color-mix(in srgb, var(--brand-accent) 15%, transparent);
+        border: 1px solid color-mix(in srgb, var(--brand-accent) 30%, transparent);
+        color: color-mix(in srgb, var(--brand-accent) 90%, #fff);
+        border-radius: 99px;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 0 20px color-mix(in srgb, var(--brand-accent) 20%, transparent);
+        font-weight: 500;
+      }
+
+      .hero__title {
+        font-size: clamp(2.5rem, 4.5vw, 4.2rem);
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        margin: 0 0 1.5rem;
+        font-weight: 700;
+      }
+      
+      .hero__subtitle {
+        font-size: 1.15rem;
+        line-height: 1.6;
+        color: var(--text-secondary);
+        margin-bottom: 3rem;
+        max-width: 90%;
       }
 
       .hero__stats {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.6rem;
-        list-style: none;
-        margin: 1rem 0 0;
-        padding: 0;
+        gap: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
       }
-
-      .hero__stats li {
-        background: color-mix(in srgb, var(--panel-muted) 55%, transparent);
-        border: 1px solid var(--border-color);
-        border-radius: 0.75rem;
-        min-width: 7.5rem;
-        padding: 0.5rem 0.65rem;
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
       }
-
-      .hero__stats strong {
-        display: block;
-        font-size: 1.02rem;
+      .stat-val {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--brand-primary);
         line-height: 1;
       }
-
-      .hero__stats span {
-        color: var(--text-muted);
-        font-size: 0.77rem;
-        text-transform: uppercase;
-      }
-
-      .hero__auth {
-        background:
-          radial-gradient(circle at 14% 14%, color-mix(in srgb, var(--brand-primary) 26%, transparent), transparent 42%),
-          linear-gradient(165deg, color-mix(in srgb, var(--panel-bg) 90%, transparent), color-mix(in srgb, var(--panel-muted) 78%, transparent));
-        border-radius: 1rem;
-        display: grid;
-        gap: 0.75rem;
-        padding: 1rem;
-      }
-
-      .auth-card__eyebrow {
-        color: var(--text-muted);
-        font-family: var(--font-mono);
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
-        margin: 0;
-        text-transform: uppercase;
-      }
-
-      .hero__auth h3 {
-        font-size: clamp(1.2rem, 2vw, 1.5rem);
-        line-height: 1.15;
-        margin: 0;
-      }
-
-      .auth-card__lead {
-        color: var(--text-secondary);
-        margin: 0;
-      }
-
-      .auth-card__switch {
-        background: color-mix(in srgb, var(--panel-muted) 70%, transparent);
-        border: 1px solid var(--border-color);
-        border-radius: 0.65rem;
-        display: grid;
-        gap: 0.35rem;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        padding: 0.25rem;
-      }
-
-      .auth-card__switch button {
-        background: transparent;
-        border: 0;
-        border-radius: 0.45rem;
-        color: var(--text-secondary);
-        cursor: pointer;
+      .stat-label {
         font-size: 0.85rem;
-        font-weight: 700;
-        padding: 0.48rem 0.5rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 500;
       }
 
-      .auth-card__switch button.active {
-        background: linear-gradient(130deg, color-mix(in srgb, var(--brand-primary) 74%, transparent), color-mix(in srgb, var(--brand-accent) 40%, transparent));
-        color: #04202f;
+      /* Floating Auth Card */
+      .hero__auth-wrapper {
+        position: relative;
+      }
+      .floating-card {
+        background: color-mix(in srgb, var(--panel-bg) 65%, transparent);
+        backdrop-filter: blur(24px);
+        border: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent);
+        border-radius: 1.5rem;
+        padding: 2.5rem;
+        box-shadow: 
+          0 24px 64px max(rgba(0,0,0,0.1), color-mix(in srgb, var(--brand-primary) 8%, transparent)),
+          inset 0 1px 0 color-mix(in srgb, var(--surface-elevated) 40%, transparent);
       }
 
-      .config-warning {
-        background: color-mix(in srgb, #f97316 15%, transparent);
-        border: 1px solid color-mix(in srgb, #f97316 34%, transparent);
-        border-radius: 0.65rem;
-        color: color-mix(in srgb, var(--text-primary) 88%, #f97316);
-        font-size: 0.8rem;
-        margin: 0;
-        padding: 0.55rem 0.6rem;
+      .auth-card__header {
+        margin-bottom: 2rem;
       }
-
-      .auth-form {
-        display: grid;
-        gap: 0.58rem;
+      .auth-card__title {
+        font-size: 1.75rem;
+        margin: 0 0 0.5rem;
+        font-weight: 600;
       }
-
-      .auth-form label {
+      .auth-card__desc {
         color: var(--text-secondary);
-        display: grid;
-        font-size: 0.8rem;
-        gap: 0.28rem;
+        font-size: 1rem;
+        margin: 0;
+        line-height: 1.5;
       }
 
-      .auth-form input {
-        background: color-mix(in srgb, var(--panel-bg) 80%, var(--surface));
+      /* Switch Toggle */
+      .auth-toggle {
+        display: flex;
+        position: relative;
+        background: color-mix(in srgb, var(--surface) 80%, transparent);
+        border-radius: 10px;
+        padding: 0.35rem;
+        margin-bottom: 2rem;
         border: 1px solid var(--border-color);
-        border-radius: 0.58rem;
-        color: var(--text-primary);
-        font: inherit;
-        font-size: 0.88rem;
-        padding: 0.56rem 0.62rem;
       }
-
-      .auth-primary,
-      .google-btn {
-        align-items: center;
-        border: 0;
-        border-radius: 0.62rem;
+      .auth-toggle button {
+        flex: 1;
+        padding: 0.75rem;
+        border: none;
+        background: transparent;
+        font-weight: 600;
+        color: var(--text-secondary);
         cursor: pointer;
-        display: inline-flex;
-        font: inherit;
-        font-weight: 700;
-        gap: 0.45rem;
-        justify-content: center;
-        padding: 0.6rem 0.78rem;
+        position: relative;
+        z-index: 2;
+        transition: color 0.3s ease;
+        font-size: 0.95rem;
       }
-
-      .auth-primary {
-        background: linear-gradient(130deg, var(--brand-primary), color-mix(in srgb, var(--brand-accent) 40%, var(--brand-primary)));
-        color: #041722;
-      }
-
-      .google-btn {
-        background: color-mix(in srgb, var(--surface-elevated) 92%, transparent);
-        border: 1px solid var(--border-color);
+      .auth-toggle button.active {
         color: var(--text-primary);
       }
-
-      .google-btn span {
-        align-items: center;
-        background: linear-gradient(145deg, #ffffff, #f6d6bb);
-        border-radius: 999px;
-        color: #1f2937;
-        display: inline-flex;
-        font-size: 0.8rem;
-        font-weight: 800;
-        height: 1.35rem;
-        justify-content: center;
-        width: 1.35rem;
+      .auth-toggle__indicator {
+        position: absolute;
+        top: 0.35rem; left: 0.35rem; bottom: 0.35rem;
+        width: calc(50% - 0.35rem);
+        background: var(--panel-bg);
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        z-index: 1;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .auth-toggle__indicator.is-signup {
+        transform: translateX(100%);
       }
 
-      .auth-primary[disabled],
-      .google-btn[disabled] {
-        cursor: not-allowed;
+      /* Fancy Forms */
+      .auth-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .signup-wrap {
+        display: grid;
+        grid-template-rows: 0fr;
+        opacity: 0;
+        transition: grid-template-rows 0.4s ease, opacity 0.4s ease;
+        margin-bottom: -1.25rem; /* collapse gap */
+      }
+      .signup-wrap.show-signup {
+        grid-template-rows: 1fr;
+        opacity: 1;
+        margin-bottom: 0;
+      }
+      .signup-wrap > label {
+        overflow: hidden;
+      }
+
+      .form-group label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+      }
+      .form-group input {
+        background: color-mix(in srgb, var(--surface) 60%, var(--panel-bg));
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 0.85rem 1rem;
+        font-size: 1rem;
+        color: var(--text-primary);
+        transition: all 0.2s ease;
+      }
+      .form-group input:focus {
+        outline: none;
+        border-color: var(--brand-primary);
+        background: var(--panel-bg);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+      }
+
+      .btn-submit {
+        margin-top: 0.5rem;
+        background: linear-gradient(135deg, var(--brand-primary), color-mix(in srgb, var(--brand-accent) 40%, var(--brand-primary)));
+        color: #041722;
+        border: none;
+        border-radius: 10px;
+        padding: 0.95rem;
+        font-weight: 700;
+        font-size: 1.05rem;
+        cursor: pointer;
+        box-shadow: 0 6px 20px color-mix(in srgb, var(--brand-primary) 25%, transparent);
+        transition: all 0.2s ease;
+      }
+      .btn-submit:hover:not([disabled]) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px color-mix(in srgb, var(--brand-primary) 35%, transparent);
+      }
+      .btn-submit[disabled] {
         opacity: 0.65;
+        cursor: not-allowed;
       }
 
       .auth-divider {
+        display: flex;
         align-items: center;
+        margin: 1.75rem 0;
         color: var(--text-muted);
-        display: grid;
-        font-family: var(--font-mono);
-        font-size: 0.7rem;
-        gap: 0.45rem;
-        grid-template-columns: 1fr auto 1fr;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-      }
-
-      .auth-divider::before,
-      .auth-divider::after {
-        background: color-mix(in srgb, var(--border-color) 80%, transparent);
-        content: '';
-        height: 1px;
-      }
-
-      .auth-message {
-        border-radius: 0.62rem;
         font-size: 0.8rem;
-        margin: 0;
-        padding: 0.52rem 0.58rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
       }
-
-      .auth-message.success {
-        background: color-mix(in srgb, #10b981 16%, transparent);
-        border: 1px solid color-mix(in srgb, #10b981 40%, transparent);
-      }
-
-      .auth-message.error {
-        background: color-mix(in srgb, #ef4444 16%, transparent);
-        border: 1px solid color-mix(in srgb, #ef4444 40%, transparent);
-      }
-
-      .showcase {
-        display: grid;
-        gap: 0.9rem;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .showcase__card {
-        display: grid;
-        gap: 0.7rem;
-        padding: 0.95rem;
-      }
-
-      .showcase__card h3 {
-        margin: 0;
-      }
-
-      .showcase__card p {
-        color: var(--text-secondary);
-        margin: 0.38rem 0 0;
-      }
-
-      .showcase__card img {
-        border: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
-        border-radius: 0.85rem;
-        width: 100%;
-      }
-
-      .workflow {
-        overflow: hidden;
-        padding: 1rem;
-        position: relative;
-      }
-
-      .workflow::before {
-        background: linear-gradient(90deg, color-mix(in srgb, var(--brand-primary) 30%, transparent), transparent 72%);
+      .auth-divider::before, .auth-divider::after {
         content: '';
+        flex: 1;
         height: 1px;
-        left: 1rem;
-        position: absolute;
-        right: 1rem;
-        top: 3.05rem;
+        background: color-mix(in srgb, var(--border-color) 70%, transparent);
+      }
+      .auth-divider span {
+        padding: 0 1rem;
       }
 
-      .workflow h3 {
-        margin: 0 0 0.95rem;
-      }
-
-      .workflow ol {
-        display: grid;
-        gap: 0.8rem;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
-
-      .workflow li {
-        display: grid;
-        gap: 0.45rem;
-        grid-template-columns: auto 1fr;
-      }
-
-      .workflow li span {
+      .btn-google {
+        display: flex;
         align-items: center;
-        background: color-mix(in srgb, var(--brand-primary) 22%, transparent);
-        border: 1px solid color-mix(in srgb, var(--brand-primary) 45%, transparent);
-        border-radius: 0.58rem;
-        display: inline-flex;
-        font-family: var(--font-mono);
-        font-size: 0.73rem;
-        font-weight: 700;
-        height: 1.7rem;
         justify-content: center;
-        min-width: 1.9rem;
+        gap: 0.75rem;
+        width: 100%;
+        background: var(--panel-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 0.8rem;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-google:hover:not([disabled]) {
+        background: color-mix(in srgb, var(--text-primary) 4%, var(--panel-bg));
+      }
+      .google-icon {
+        background: linear-gradient(145deg, #ffffff, #f6d6bb);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        color: #1f2937;
+        font-weight: 900;
+        font-size: 0.9rem;
       }
 
-      .workflow li strong {
-        display: block;
-        font-size: 0.95rem;
+      .auth-feedback { margin-top: 1rem; }
+      .auth-message {
+        padding: 0.75rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        margin: 0;
+        text-align: center;
+        font-weight: 500;
+      }
+      .auth-message.error {
+        background: color-mix(in srgb, #ef4444 15%, transparent);
+        color: color-mix(in srgb, #ef4444 95%, var(--text-primary));
+        border: 1px solid color-mix(in srgb, #ef4444 30%, transparent);
+      }
+      .auth-message.success {
+        background: color-mix(in srgb, #10b981 15%, transparent);
+        color: color-mix(in srgb, #10b981 95%, var(--text-primary));
+        border: 1px solid color-mix(in srgb, #10b981 30%, transparent);
       }
 
-      .workflow li p {
+      .config-warning {
+        background: color-mix(in srgb, #f59e0b 15%, transparent);
+        color: color-mix(in srgb, #f59e0b 95%, var(--text-primary));
+        padding: 0.85rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid color-mix(in srgb, #f59e0b 35%, transparent);
+      }
+
+      /* Sections & Cards */
+      .section-heading {
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto 4rem;
+      }
+      .section-heading h2 {
+        font-size: 2.5rem;
+        margin: 0 0 1rem;
+        font-weight: 700;
+      }
+      .section-heading p {
         color: var(--text-secondary);
-        margin: 0.2rem 0 0;
-      }
-
-      .grid {
-        display: grid;
-        gap: 0.9rem;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .grid article {
-        background:
-          linear-gradient(160deg, color-mix(in srgb, var(--panel-bg) 95%, transparent), var(--panel-bg));
-        overflow: hidden;
-        padding: 1rem;
-        position: relative;
-      }
-
-      .grid article::after {
-        background: radial-gradient(circle at center, color-mix(in srgb, var(--brand-primary) 34%, transparent), transparent 72%);
-        content: '';
-        height: 10rem;
-        opacity: 0.3;
-        position: absolute;
-        right: -3.3rem;
-        top: -4.5rem;
-        width: 10rem;
-      }
-
-      .card__label {
-        color: var(--text-muted);
-        display: inline-block;
-        font-family: var(--font-mono);
-        font-size: 0.66rem;
-        letter-spacing: 0.08em;
-      }
-
-      .grid h3 {
-        margin: 0.42rem 0 0.45rem;
-      }
-
-      .grid p {
-        color: var(--text-secondary);
+        font-size: 1.15rem;
         margin: 0;
       }
 
-      .reveal {
-        animation: reveal-up 0.6s ease both;
+      .showcase-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        padding: 0 5%;
+      }
+      .feature-card {
+        background: linear-gradient(160deg, color-mix(in srgb, var(--panel-bg) 95%, transparent), var(--panel-bg));
+        border: 1px solid var(--border-color);
+        border-radius: 1.5rem;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--shadow-soft);
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      }
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-medium);
+        border-color: color-mix(in srgb, var(--brand-primary) 35%, var(--border-color));
+      }
+      .feature-card__content {
+        padding: 2.5rem 2.5rem 1.5rem;
+      }
+      .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1.25rem;
+        display: inline-block;
+      }
+      .feature-card h3 {
+        font-size: 1.65rem;
+        margin: 0 0 0.85rem;
+      }
+      .feature-card p {
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin: 0;
+        font-size: 1.05rem;
+      }
+      .feature-card__visual {
+        background: color-mix(in srgb, var(--surface) 60%, var(--panel-bg));
+        padding: 2rem;
+        margin-top: auto;
+        border-top: 1px solid color-mix(in srgb, var(--border-color) 60%, transparent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .feature-card__visual img {
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid var(--border-color);
       }
 
-      .reveal--delay-1 {
-        animation-delay: 0.07s;
+      /* Workflow Block */
+      .workflow-section {
+        padding: 2rem 5% 5rem;
+      }
+      .workflow-container {
+        padding: 4rem 3rem;
+        text-align: center;
+        background: linear-gradient(145deg, color-mix(in srgb, var(--panel-bg) 80%, transparent), color-mix(in srgb, var(--surface) 40%, transparent));
+      }
+      .workflow-container h3 {
+        font-size: 2.25rem;
+        margin: 0 0 3.5rem;
+      }
+      .workflow-steps {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1.5rem;
+      }
+      .step-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.25rem;
+      }
+      .step-num {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: color-mix(in srgb, var(--brand-primary) 12%, transparent);
+        color: var(--brand-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        font-weight: 800;
+        border: 2px solid color-mix(in srgb, var(--brand-primary) 35%, transparent);
+        position: relative;
+        z-index: 2;
+      }
+      .step-divider {
+        flex: 1;
+        height: 2px;
+        background: linear-gradient(90deg, color-mix(in srgb, var(--brand-primary) 35%, transparent), color-mix(in srgb, var(--brand-primary) 5%, transparent));
+        margin-top: 28px;
+        max-width: 80px;
+      }
+      .step-item h4 {
+        font-size: 1.25rem;
+        margin: 0;
+      }
+      .step-item p {
+        color: var(--text-secondary);
+        margin: 0;
+        font-size: 1rem;
+        max-width: 250px;
+        line-height: 1.5;
       }
 
-      .reveal--delay-2 {
-        animation-delay: 0.14s;
+      .app-footer {
+        text-align: center;
+        padding: 3rem 5%;
+        border-top: 1px solid var(--border-color);
+        color: var(--text-muted);
+        margin-top: auto;
       }
 
-      .reveal--delay-3 {
-        animation-delay: 0.22s;
-      }
+      .reveal { animation: reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+      .reveal--delay-1 { animation-delay: 0.15s; }
+      .reveal--delay-2 { animation-delay: 0.3s; }
 
       @keyframes reveal-up {
-        from {
-          opacity: 0;
-          transform: translateY(16px);
-        }
-
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
       }
 
-      @media (max-width: 1080px) {
-        .hero {
+      @media (max-width: 1024px) {
+        .hero-section {
           grid-template-columns: 1fr;
+          text-align: center;
         }
-
-        .workflow ol {
-          grid-template-columns: 1fr;
+        .hero__title {
+          margin: 0 auto 1.5rem;
         }
-
-        .workflow::before {
-          display: none;
-        }
+        .hero__subtitle { margin: 0 auto 3rem; }
+        .hero__stats { justify-content: center; }
+        .showcase-grid { grid-template-columns: 1fr; }
+        .navbar__links { display: none; }
       }
-
-      @media (max-width: 900px) {
-        .showcase {
-          grid-template-columns: 1fr;
+      @media (max-width: 768px) {
+        .workflow-steps {
+          flex-direction: column;
+          align-items: center;
+          gap: 3rem;
         }
-
-        .grid {
-          grid-template-columns: 1fr;
-        }
+        .step-divider { display: none; }
       }
-
-      @media (max-width: 640px) {
+      @media (max-width: 600px) {
+        .hero__title { font-size: 2.25rem; }
         .hero__stats {
-          display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
+          flex-direction: column;
+          align-items: center;
+          gap: 2rem;
         }
-
-        .hero__stats li {
-          min-width: 0;
-        }
+        .floating-card { padding: 1.5rem; }
       }
     `
   ],
@@ -653,11 +834,14 @@ export class LandingPageComponent {
   readonly mode = signal<'login' | 'signup'>('signup');
   readonly errorMessage = signal('');
   readonly successMessage = signal('');
+  readonly isScrolled = signal(false);
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
   readonly isLoginMode = computed(() => this.mode() === 'login');
+  
+  currentYear = new Date().getFullYear();
 
   fullName = '';
   email = '';
@@ -674,6 +858,20 @@ export class LandingPageComponent {
     const authFailed = this.route.snapshot.queryParamMap.get('auth') === 'failed';
     if (authFailed) {
       this.errorMessage.set('Google sign-in did not complete. Please try again.');
+    }
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', () => {
+        this.isScrolled.set(window.scrollY > 20);
+      });
+    }
+  }
+
+  scrollToAuth(mode: 'login' | 'signup') {
+    this.switchMode(mode);
+    const element = document.getElementById('auth-box');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
 
