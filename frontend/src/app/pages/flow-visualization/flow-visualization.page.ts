@@ -29,14 +29,19 @@ interface PositionedNode {
 
       <p class="error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
 
-      <section class="card legend" *ngIf="graph()">
+      <section class="center-content" *ngIf="isLoading()">
+        <div class="spinner-loader"></div>
+        <p>Loading flow visualization...</p>
+      </section>
+
+      <section class="card legend" *ngIf="!isLoading() && graph()">
         <span><i class="dot group"></i> Endpoint Group</span>
         <span><i class="dot endpoint"></i> Endpoint</span>
         <span><i class="dot resource"></i> Resource</span>
         <span><i class="dot auth"></i> Authentication</span>
       </section>
 
-      <section class="card graph-wrapper" *ngIf="graph() as graphData">
+      <section class="card graph-wrapper" *ngIf="!isLoading() && graph() as graphData">
         <svg [attr.viewBox]="'0 0 ' + viewBoxWidth() + ' ' + viewBoxHeight()" class="graph-canvas" role="img">
           <title>API flow graph</title>
 
@@ -60,7 +65,7 @@ interface PositionedNode {
         </svg>
       </section>
 
-      <section class="card empty" *ngIf="graph() && graph()!.nodes.length === 0">
+      <section class="card empty" *ngIf="!isLoading() && graph() && graph()!.nodes.length === 0">
         No flow graph is available for this project yet.
       </section>
     </section>
@@ -176,6 +181,7 @@ export class FlowVisualizationPageComponent {
 
   readonly graph = signal<FlowGraph | null>(null);
   readonly errorMessage = signal('');
+  readonly isLoading = signal(true);
 
   readonly positionedNodes = computed<PositionedNode[]>(() => {
     const graph = this.graph();
@@ -223,6 +229,7 @@ export class FlowVisualizationPageComponent {
       const projectId = params.get('projectId');
       if (!projectId) {
         this.errorMessage.set('projectId is required');
+        this.isLoading.set(false);
         return;
       }
 
@@ -243,13 +250,17 @@ export class FlowVisualizationPageComponent {
 
   private loadFlow(projectId: string): void {
     this.errorMessage.set('');
+    this.isLoading.set(true);
+    this.graph.set(null);
 
     this.api.getFlow(projectId).subscribe({
       next: (result) => {
         this.graph.set(result.flow);
+        this.isLoading.set(false);
       },
       error: (error: { error?: { message?: string } }) => {
         this.errorMessage.set(error?.error?.message || 'Failed to load flow visualization.');
+        this.isLoading.set(false);
       }
     });
   }

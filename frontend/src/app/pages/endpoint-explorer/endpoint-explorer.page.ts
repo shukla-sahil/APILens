@@ -23,7 +23,12 @@ import { SnippetTabsComponent } from '../../shared/components/snippet-tabs/snipp
 
       <p class="error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
 
-      <section class="card controls" *ngIf="projectData()">
+      <section class="center-content" *ngIf="isLoading()">
+        <div class="spinner-loader"></div>
+        <p>Loading endpoint explorer...</p>
+      </section>
+
+      <section class="card controls" *ngIf="!isLoading() && projectData()">
         <label>
           Search path or summary
           <input
@@ -51,7 +56,7 @@ import { SnippetTabsComponent } from '../../shared/components/snippet-tabs/snipp
         <p class="controls__count">Showing {{ filteredEndpoints().length }} endpoints</p>
       </section>
 
-      <section class="explorer-layout" *ngIf="projectData() as data">
+      <section class="explorer-layout" *ngIf="!isLoading() && projectData() as data">
         <aside class="card endpoint-list">
           <h3>{{ data.project.name }}</h3>
 
@@ -125,7 +130,7 @@ import { SnippetTabsComponent } from '../../shared/components/snippet-tabs/snipp
         </section>
       </section>
 
-      <section class="card empty" *ngIf="projectData() && filteredEndpoints().length === 0">
+      <section class="card empty" *ngIf="!isLoading() && projectData() && filteredEndpoints().length === 0">
         No endpoints match your current search/filter.
       </section>
     </section>
@@ -396,6 +401,7 @@ export class EndpointExplorerPageComponent {
   readonly projectData = signal<ProjectDetailsResponse | null>(null);
   readonly selectedEndpoint = signal<ApiEndpoint | null>(null);
   readonly errorMessage = signal('');
+  readonly isLoading = signal(true);
 
   readonly isMockLoading = signal(false);
   readonly mockStatus = signal('');
@@ -453,6 +459,7 @@ export class EndpointExplorerPageComponent {
       const projectId = params.get('projectId');
       if (!projectId) {
         this.errorMessage.set('projectId is required');
+        this.isLoading.set(false);
         return;
       }
 
@@ -493,6 +500,9 @@ export class EndpointExplorerPageComponent {
 
   private loadProject(projectId: string): void {
     this.errorMessage.set('');
+    this.isLoading.set(true);
+    this.projectData.set(null);
+    this.selectedEndpoint.set(null);
 
     this.api.getProject(projectId).subscribe({
       next: (result) => {
@@ -502,9 +512,11 @@ export class EndpointExplorerPageComponent {
         const selected = this.selectedEndpoint();
         const stillExists = selected && available.some((endpoint) => endpoint.id === selected.id);
         this.selectedEndpoint.set(stillExists ? selected : available[0] || null);
+        this.isLoading.set(false);
       },
       error: (error: { error?: { message?: string } }) => {
         this.errorMessage.set(error?.error?.message || 'Failed to load project endpoints.');
+        this.isLoading.set(false);
       }
     });
   }
