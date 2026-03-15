@@ -69,11 +69,22 @@ SUPABASE_SERVICE_ROLE_KEY=YOUR_SERVICE_ROLE_KEY
 SUPABASE_STORAGE_BUCKET=spec-files
 PUBLIC_DOC_BASE_URL=http://localhost:4200/share
 OPENAI_API_KEY=
+OPENROUTER_API_KEY=
+OPENAI_BASE_URL=
+OPENROUTER_BASE_URL=
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_TIMEOUT_MS=15000
+OPENROUTER_PREFER_FREE=true
+OPENROUTER_FREE_MODELS=openrouter/free,openai/gpt-oss-20b:free,google/gemma-3-12b-it:free,meta-llama/llama-3.3-70b-instruct:free
 ```
 
 Notes:
 - If `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are empty, backend falls back to in-memory storage for development.
-- `OPENAI_API_KEY` is optional in this implementation; AI helper behavior is deterministic/rules-based by default.
+- `OPENAI_API_KEY` is optional. If provided, `/project/:id/chat` uses OpenAI with grounded endpoint context.
+- You can also use `OPENROUTER_API_KEY` (keys typically start with `sk-or-v1`).
+- Optional: set `OPENAI_BASE_URL` or `OPENROUTER_BASE_URL` only if you want to force a custom endpoint URL.
+- With OpenRouter keys, API Lens automatically retries free `:free` models when paid models fail with `402/429/404`.
+- If OpenAI is unavailable (missing key, timeout, API failure), chat automatically falls back to deterministic rule-based responses.
 
 #### Frontend
 

@@ -41,7 +41,7 @@ interface ChatMessage {
       <section class="card chat-window">
         <article *ngFor="let item of messages()" class="chat-row" [class.assistant]="item.role === 'assistant'">
           <h4>{{ item.role === 'user' ? 'You' : 'API Assistant' }}</h4>
-          <p>{{ item.text }}</p>
+          <p class="chat-row__text">{{ item.role === 'assistant' ? formatAssistantText(item.text) : item.text }}</p>
 
           <div class="citations" *ngIf="item.citations && item.citations.length > 0">
             <span *ngFor="let cite of item.citations">
@@ -125,8 +125,11 @@ interface ChatMessage {
         margin: 0 0 0.35rem;
       }
 
-      .chat-row p {
+      .chat-row__text {
+        line-height: 1.55;
         margin: 0;
+        white-space: pre-line;
+        word-break: break-word;
       }
 
       .citations {
@@ -211,6 +214,24 @@ export class ChatApiPageComponent {
 
   applyPrompt(text: string): void {
     this.question = text;
+  }
+
+  formatAssistantText(text: string): string {
+    return String(text || '')
+      .replace(/\r\n/g, '\n')
+      .replace(/\s+(?=#{1,6}\s)/g, '\n')
+      .replace(/\s+(?=\d+\.\s)/g, '\n')
+      .replace(/```[a-zA-Z0-9_-]*\n?/g, '')
+      .replace(/```/g, '')
+      .replace(/^#{1,6}\s*/gm, '')
+      .replace(/^\s*[-*]\s+/gm, '• ')
+      .replace(/\*\*(.*?)\*\*/g, '$1')
+      .replace(/__(.*?)__/g, '$1')
+      .replace(/`([^`]+)`/g, '$1')
+      .replace(/\*\*/g, '')
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
   }
 
   sendQuestion(): void {
