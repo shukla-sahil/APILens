@@ -1,4 +1,4 @@
-const serverless = require('serverless-http');
 const app = require('../src/app');
 
-module.exports = serverless(app);
+// Vercel Node functions invoke handlers as (req, res), and an Express app is directly compatible.
+module.exports = app;
