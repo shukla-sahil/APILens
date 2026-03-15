@@ -1,0 +1,34 @@
+<svg width="960" height="540" viewBox="0 0 960 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bga" x1="0" y1="0" x2="960" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1A28"/>
+      <stop offset="1" stop-color="#112639"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" rx="20" fill="url(#bga)"/>
+
+  <rect x="36" y="34" width="888" height="48" rx="10" fill="#12324A" stroke="#2B526A"/>
+  <text x="62" y="65" fill="#DDF4FF" font-family="Space Grotesk, sans-serif" font-size="24" font-weight="700">Documentation Viewer</text>
+
+  <rect x="36" y="102" width="264" height="402" rx="14" fill="#102A3E" stroke="#24485F"/>
+  <text x="62" y="146" fill="#D3EBFF" font-family="IBM Plex Mono, monospace" font-size="21">Endpoint Groups</text>
+  <rect x="62" y="172" width="212" height="54" rx="10" fill="#18405E"/>
+  <text x="82" y="207" fill="#9ED8FF" font-family="IBM Plex Mono, monospace" font-size="18">Resource Group A</text>
+  <rect x="62" y="236" width="212" height="54" rx="10" fill="#13324A"/>
+  <text x="82" y="271" fill="#B5D6EC" font-family="IBM Plex Mono, monospace" font-size="18">Resource Group B</text>
+  <rect x="62" y="300" width="212" height="54" rx="10" fill="#13324A"/>
+  <text x="82" y="335" fill="#B5D6EC" font-family="IBM Plex Mono, monospace" font-size="18">Resource Group C</text>
+
+  <rect x="320" y="102" width="604" height="402" rx="14" fill="#0F2435" stroke="#24485F"/>
+  <rect x="346" y="132" width="548" height="64" rx="11" fill="#153853"/>
+  <rect x="366" y="150" width="52" height="30" rx="8" fill="#1E6952"/>
+  <text x="378" y="171" fill="#9EFFE0" font-family="IBM Plex Mono, monospace" font-size="16">GET</text>
+  <text x="436" y="172" fill="#E8F5FF" font-family="IBM Plex Mono, monospace" font-size="24" font-weight="600">/resource/{id}</text>
+
+  <text x="346" y="236" fill="#A7CDE6" font-family="Space Grotesk, sans-serif" font-size="28" font-weight="700">Responses</text>
+  <rect x="346" y="256" width="548" height="220" rx="12" fill="#081522" stroke="#24485F"/>
+  <text x="372" y="302" fill="#8FB9D8" font-family="IBM Plex Mono, monospace" font-size="18">200  application/json</text>
+  <text x="372" y="340" fill="#DDF0FF" font-family="IBM Plex Mono, monospace" font-size="17">{"id": "r_123", "label": "Sample Item"}</text>
+  <text x="372" y="374" fill="#8FB9D8" font-family="IBM Plex Mono, monospace" font-size="18">401  application/json</text>
+  <text x="372" y="412" fill="#DDF0FF" font-family="IBM Plex Mono, monospace" font-size="17">{"message": "Unauthorized"}</text>
+</svg>

@@ -1,0 +1,46 @@
+<svg width="960" height="540" viewBox="0 0 960 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgb" x1="0" y1="0" x2="960" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1A28"/>
+      <stop offset="1" stop-color="#12283B"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" rx="20" fill="url(#bgb)"/>
+
+  <text x="42" y="58" fill="#E3F4FF" font-family="Space Grotesk, sans-serif" font-size="26" font-weight="700">API Flow Visualization</text>
+
+  <line x1="215" y1="170" x2="414" y2="127" stroke="#315A73" stroke-width="2"/>
+  <line x1="215" y1="170" x2="414" y2="228" stroke="#315A73" stroke-width="2"/>
+  <line x1="536" y1="127" x2="752" y2="170" stroke="#315A73" stroke-width="2"/>
+  <line x1="536" y1="228" x2="752" y2="170" stroke="#315A73" stroke-width="2"/>
+  <line x1="536" y1="319" x2="752" y2="354" stroke="#315A73" stroke-width="2"/>
+  <line x1="215" y1="354" x2="414" y2="319" stroke="#315A73" stroke-width="2"/>
+
+  <rect x="72" y="132" width="142" height="76" rx="12" fill="#16425F" stroke="#2C607A"/>
+  <text x="95" y="162" fill="#A9DFFF" font-family="IBM Plex Mono, monospace" font-size="14">GROUP</text>
+  <text x="92" y="186" fill="#E4F4FF" font-family="Space Grotesk, sans-serif" font-size="20" font-weight="700">Group A</text>
+
+  <rect x="72" y="316" width="142" height="76" rx="12" fill="#16425F" stroke="#2C607A"/>
+  <text x="95" y="346" fill="#A9DFFF" font-family="IBM Plex Mono, monospace" font-size="14">GROUP</text>
+  <text x="90" y="370" fill="#E4F4FF" font-family="Space Grotesk, sans-serif" font-size="20" font-weight="700">Group B</text>
+
+  <rect x="414" y="90" width="122" height="74" rx="12" fill="#1C6651" stroke="#2C8A6D"/>
+  <text x="442" y="120" fill="#A9FFE0" font-family="IBM Plex Mono, monospace" font-size="13">ENDPOINT</text>
+  <text x="428" y="144" fill="#E6FFF5" font-family="IBM Plex Mono, monospace" font-size="18">GET /resource-a</text>
+
+  <rect x="414" y="190" width="122" height="74" rx="12" fill="#1C6651" stroke="#2C8A6D"/>
+  <text x="442" y="220" fill="#A9FFE0" font-family="IBM Plex Mono, monospace" font-size="13">ENDPOINT</text>
+  <text x="421" y="244" fill="#E6FFF5" font-family="IBM Plex Mono, monospace" font-size="18">POST /resource-a</text>
+
+  <rect x="414" y="281" width="122" height="74" rx="12" fill="#1C6651" stroke="#2C8A6D"/>
+  <text x="442" y="311" fill="#A9FFE0" font-family="IBM Plex Mono, monospace" font-size="13">ENDPOINT</text>
+  <text x="428" y="335" fill="#E6FFF5" font-family="IBM Plex Mono, monospace" font-size="18">GET /resource-b</text>
+
+  <rect x="752" y="132" width="136" height="76" rx="12" fill="#6A4721" stroke="#98703B"/>
+  <text x="783" y="162" fill="#FFD79F" font-family="IBM Plex Mono, monospace" font-size="14">RESOURCE</text>
+  <text x="768" y="186" fill="#FFF2DF" font-family="Space Grotesk, sans-serif" font-size="20" font-weight="700">Resource X</text>
+
+  <rect x="752" y="316" width="136" height="76" rx="12" fill="#65333A" stroke="#975059"/>
+  <text x="796" y="346" fill="#FFB7C1" font-family="IBM Plex Mono, monospace" font-size="14">AUTH</text>
+  <text x="789" y="370" fill="#FFE6EA" font-family="Space Grotesk, sans-serif" font-size="20" font-weight="700">Token</text>
+</svg>

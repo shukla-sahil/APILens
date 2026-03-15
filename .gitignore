@@ -1,0 +1,25 @@
+# Node and package managers
+node_modules/
+.pnpm-store/
+.npm/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+.angular/
+coverage/
+.vercel/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/settings.json
