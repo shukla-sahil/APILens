@@ -25,10 +25,10 @@ import { ProjectContextService } from '../core/services/project-context.service'
 
         <nav class="nav">
           <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-          <a [routerLink]="docsLink()" routerLinkActive="active">Docs Viewer</a>
-          <a [routerLink]="explorerLink()" routerLinkActive="active">Endpoint Explorer</a>
-          <a [routerLink]="flowLink()" routerLinkActive="active">Flow Visualization</a>
-          <a [routerLink]="chatLink()" routerLinkActive="active">Chat With API</a>
+          <a [routerLink]="docsLink()" routerLinkActive="active" [class.disabled]="!context.activeProjectId()">Docs Viewer</a>
+          <a [routerLink]="explorerLink()" routerLinkActive="active" [class.disabled]="!context.activeProjectId()">Endpoint Explorer</a>
+          <a [routerLink]="flowLink()" routerLinkActive="active" [class.disabled]="!context.activeProjectId()">Flow Visualization</a>
+          <a [routerLink]="chatLink()" routerLinkActive="active" [class.disabled]="!context.activeProjectId()">Chat With API</a>
           <a routerLink="/history" routerLinkActive="active">History</a>
         </nav>
 
@@ -149,10 +149,16 @@ import { ProjectContextService } from '../core/services/project-context.service'
         transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
       }
 
-      .nav a:hover {
+      .nav a:not(.disabled):hover {
         background: color-mix(in srgb, var(--brand-primary) 16%, transparent);
         color: var(--text-primary);
         transform: translateX(2px);
+      }
+
+      .nav a.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
       }
 
       .nav a.active {
@@ -289,24 +295,24 @@ export class AppShellComponent {
 
   private readonly router = inject(Router);
 
-  docsLink(): string[] {
+  docsLink(): string[] | null {
     const projectId = this.context.activeProjectId();
-    return projectId ? ['/docs', projectId] : ['/history'];
+    return projectId ? ['/docs', projectId] : null;
   }
 
-  explorerLink(): string[] {
+  explorerLink(): string[] | null {
     const projectId = this.context.activeProjectId();
-    return projectId ? ['/explorer', projectId] : ['/history'];
+    return projectId ? ['/explorer', projectId] : null;
   }
 
-  flowLink(): string[] {
+  flowLink(): string[] | null {
     const projectId = this.context.activeProjectId();
-    return projectId ? ['/flow', projectId] : ['/history'];
+    return projectId ? ['/flow', projectId] : null;
   }
 
-  chatLink(): string[] {
+  chatLink(): string[] | null {
     const projectId = this.context.activeProjectId();
-    return projectId ? ['/chat', projectId] : ['/history'];
+    return projectId ? ['/chat', projectId] : null;
   }
 
   async signOut(): Promise<void> {
